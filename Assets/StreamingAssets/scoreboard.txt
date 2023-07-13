@@ -1,0 +1,4 @@
+Mode: Co-op, Name: noveky & lambert, Score: 34700
+Mode: Co-op, Name: noveky & tan, Score: 32300
+Mode: Co-op, Name: noveky & lx, Score: 35600
+Mode: Singleplayer, Name: noveky, Score: 36400Mode: Singleplayer, Name: noveky, Score: 31800
