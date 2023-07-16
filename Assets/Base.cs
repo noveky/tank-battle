@@ -37,7 +37,7 @@ public class Base : MonoBehaviour
 
 	private void Update()
 	{
-		if (LevelManager.instance.paused) return;
+		if (LevelManager.Instance.paused) return;
 
 		float y = wall.hp / wall.initHp;
 		contentTrans.localPosition = new Vector3(0f, y * 0.5f - 0.5f, 0f);

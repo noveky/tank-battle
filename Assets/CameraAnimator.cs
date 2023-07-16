@@ -29,7 +29,7 @@ class CameraAnimator : Singleton<CameraAnimator>
 
 	private void Update()
 	{
-		if (LevelManager.instance.paused) return;
+		if (LevelManager.Instance.paused) return;
 
 		while (simElapsedTime >= Simulation.timestep)
 		{

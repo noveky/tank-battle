@@ -74,10 +74,10 @@ Material:
     - _EmissionEnabled: 0
     - _FlipbookMode: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0.055
+    - _Glossiness: 0.399
     - _GlossyReflections: 1
     - _LightingEnabled: 1
-    - _Metallic: 0.02
+    - _Metallic: 0.629
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
@@ -91,7 +91,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 0.009433985, g: 0.009433985, b: 0.009433985, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Color: {r: 0.0754717, g: 0.0754717, b: 0.0754717, a: 1}
+    - _EmissionColor: {r: 2.6390157, g: 0.46570867, b: 0, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

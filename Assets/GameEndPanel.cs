@@ -9,6 +9,6 @@ public class GameEndPanel : MonoBehaviour
 
 	private void Awake()
 	{
-		scoreText.text = GameManager.instance.score.ToString();
+		scoreText.text = GameManager.Instance.score.ToString();
 	}
 }

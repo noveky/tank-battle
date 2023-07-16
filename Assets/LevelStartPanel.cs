@@ -5,21 +5,32 @@ using UnityEngine.UI;
 
 public class LevelStartPanel : MonoBehaviour
 {
-	public Text[] texts = { };
+	public Text[] levelNameTexts = { };
 
-	private void Start()
+	private void LateUpdate()
 	{
-		foreach (Text text in texts)
+		if (LevelManager.Instance.PreparationCountdown < 0)
 		{
-			text.text = LevelManager.instance.levelName;
+			gameObject.SetActive(false);
 		}
-		StartCoroutine(Hide());
-	}
 
-	IEnumerator Hide()
-	{
-		yield return new WaitForSeconds(2f);
+		string textStr;
+		if (LevelManager.Instance.ElapsedTime < 2)
+		{
+			textStr = LevelManager.Instance.levelName;
+		}
+		else if (LevelManager.Instance.PreparationCountdown == 0)
+		{
+			textStr = "GO!";
+		}
+		else
+		{
+			textStr = LevelManager.Instance.PreparationCountdown.ToString();
+		}
 
-		gameObject.SetActive(false);
+		foreach (Text text in levelNameTexts)
+		{
+			text.text = textStr;
+		}
 	}
 }

@@ -18,6 +18,8 @@ public class SpawnPoint : MonoBehaviour
 	float spawnTimer = 0f;
 	bool spawned = false;
 
+	const float spawnParticlePlayTime = 1f;
+
 	private void Awake()
 	{
 		tankPrefab.SetActive(false);
@@ -41,26 +43,33 @@ public class SpawnPoint : MonoBehaviour
 		}
 
 		// 双人合作模式，敌方坦克血量加倍
-		if (GameManager.instance.gameMode == GameManager.GameMode.COOP_MODE)
+		if (GameManager.Instance.gameMode == GameManager.GameMode.COOP_MODE)
 		{
 			if (tankController.tank.isMine)
 			{
-				//tankController.tank.initHp *= 0.5f;
-				//tankController.tank.hp *= 0.5f;
+				tankController.tank.initHp *= 1.5f;
+				tankController.tank.hp *= 1.5f;
 				tankController.tank.fireInterval *= 0.75f;
 			}
 			else
 			{
 				tankController.tank.initHp *= 2f;
 				tankController.tank.hp *= 2f;
-				tankController.tank.fireInterval *= 0.5f;
+				tankController.tank.fireInterval *= 1f;
 			}
 		}
 	}
 
 	private void Start()
 	{
-		spawnTimer = spawnTime;
+		if (playerNum == 0) // Enemy
+		{
+			spawnTimer = spawnTime + spawnParticlePlayTime + LevelManager.Instance.preparationTime;
+		}
+		else // Player
+		{
+			spawnTimer = spawnTime;
+		}
 		//StartCoroutine(DelaySpawn());
 	}
 
@@ -73,11 +82,11 @@ public class SpawnPoint : MonoBehaviour
 
 	private void Update()
 	{
-		if (LevelManager.instance.paused) return;
+		if (LevelManager.Instance.paused) return;
 
 		if (spawnTimer >= 0f)
 		{
-			if (spawnTimer - Time.deltaTime < 1f)
+			if (spawnTimer - Time.deltaTime < spawnParticlePlayTime)
 			{
 				if (spawnParticle != null) spawnParticle.Play();
 			}

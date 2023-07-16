@@ -8,7 +8,7 @@ public class MainMenu : MonoBehaviour
 {
 	private void Start()
 	{
-		GameManager.instance.OnExitGamePlay();
+		GameManager.Instance.OnExitGamePlay();
 	}
 
 	public void GameMode(int mode)
@@ -17,17 +17,17 @@ public class MainMenu : MonoBehaviour
 		{
 			case 0:
 				{
-					GameManager.instance.gameMode = GameManager.GameMode.SINGLEPLAYER_MODE;
+					GameManager.Instance.gameMode = GameManager.GameMode.SINGLEPLAYER_MODE;
 					break;
 				}
 			case 1:
 				{
-					GameManager.instance.gameMode = GameManager.GameMode.COOP_MODE;
+					GameManager.Instance.gameMode = GameManager.GameMode.COOP_MODE;
 					break;
 				}
 			case 2:
 				{
-					GameManager.instance.gameMode = GameManager.GameMode.DUALBATTLE_MODE;
+					GameManager.Instance.gameMode = GameManager.GameMode.DUALBATTLE_MODE;
 					break;
 				}
 		}
@@ -36,20 +36,20 @@ public class MainMenu : MonoBehaviour
 	public void NewGame()
 	{
 		// 重置分数
-		GameManager.instance.score = 0;
+		GameManager.Instance.score = 0;
 
 		// 加载关卡
-		switch (GameManager.instance.gameMode)
+		switch (GameManager.Instance.gameMode)
 		{
 			case GameManager.GameMode.SINGLEPLAYER_MODE:
 			case GameManager.GameMode.COOP_MODE:
 				{
-					SceneManager.LoadScene(GameManager.firstLevel);
+					LoadLevel(GameManager.firstLevel);
 					break;
 				}
 			case GameManager.GameMode.DUALBATTLE_MODE:
 				{
-					SceneManager.LoadScene(GameManager.dualLevel);
+					LoadLevel(GameManager.dualLevel);
 					break;
 				}
 		}
@@ -57,15 +57,20 @@ public class MainMenu : MonoBehaviour
 
 	public void LoadGame()
 	{
-		string levelName = GameManager.instance.GetSavedLevelName();
+		string levelName = GameManager.Instance.GetSavedLevelName();
 		if (levelName.Trim() != string.Empty)
 		{
 			// 读取完毕进入存档时，删除该存档
-			GameManager.instance.DeleteArchive();
+			GameManager.Instance.DeleteArchive();
 
 			// 加载关卡
-			SceneManager.LoadScene(levelName);
+			LoadLevel(levelName);
 		}
+	}
+
+	public void LoadLevel(string levelName)
+	{
+		SceneManager.LoadScene(levelName);
 	}
 
 	public void Quit()

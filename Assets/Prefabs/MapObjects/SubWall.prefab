@@ -118,6 +118,7 @@ MonoBehaviour:
   destroyable: 1
   isBase: 0
   botBreakingDesireBonus: 0
+  fixRotation: 1
 --- !u!1 &2337454657875896810
 GameObject:
   m_ObjectHideFlags: 0
@@ -342,7 +343,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 78cd1675a9736084cb928749d0b07ee2, type: 2}
+  - {fileID: 2100000, guid: 292b9a3a12e505348972f04efa6586e4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

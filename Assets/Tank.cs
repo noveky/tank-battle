@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Tank : MonoBehaviour
 {
-	public enum Item { NONE, HEALTH, POWER };
+	public enum Item { NONE, HEALTH };
 
 	public bool isMine = false;
 	public int playerNum = 1;
@@ -13,11 +13,13 @@ public class Tank : MonoBehaviour
 	[SerializeField] GameObject destroyParticlePrefab = null;
 
 	public Transform muzzleTrans = null;
-	[SerializeField] GameObject shellPrefab = null;
+	[SerializeField] GameObject shellPrefabPlayer = null;
+	[SerializeField] GameObject shellPrefabEnemy = null;
 	[SerializeField] ParticleSystem[] firingParticles = { };
 	[SerializeField] ParticleSystem[] dustParticles = { };
 	[SerializeField] ParticleSystem immortalParticle = null; // 无敌时间粒子效果
 	[SerializeField] ParticleSystem healthParticle = null; // 获得加血道具的粒子效果
+	[SerializeField] ParticleSystem[] onFireParticles = { }; // 着火时的粒子效果
 	[SerializeField] BotTarget botTarget = null;
 
 	[SerializeField] AudioSource fireAudio = null;
@@ -27,8 +29,11 @@ public class Tank : MonoBehaviour
 	float maxSpeed = 0f; // 当前最大移速
 	float speed = 0f; // 当前移速
 	float decelEffect = 0f; // 减速效果
-	bool onIce = false; // 是否在溜冰
+	public bool OnIce { get; private set; } = false; // 是否在滑冰
+	public bool InLava { get; private set; } = false; // 是否在踩岩浆
+	public bool InFrontOfLava { get; private set; } = false; // 是否面前是岩浆
 	List<Collider> iceColliders = new List<Collider>(); // 存储当前有交集的冰面触发器碰撞体，当非空时说明在冰面上
+	List<Collider> lavaColliders = new List<Collider>();
 
 	[SerializeField] float shellSpeed = 0f;
 	[SerializeField] float shellPower = 0f;
@@ -42,7 +47,7 @@ public class Tank : MonoBehaviour
 	public float fireInterval = 0f;
 	[System.NonSerialized] public float fireTimer = 0f;
 
-	[System.NonSerialized] public bool isImmortal = false;
+	[System.NonSerialized] public bool isImmortal = true;
 	float immortalTimer = 0f;
 
 	[System.NonSerialized] public TankController controller = null;
@@ -72,6 +77,10 @@ public class Tank : MonoBehaviour
 			immortalTimer = immortalTime;
 			immortalParticle.Play();
 		}
+		else
+		{
+			isImmortal = false;
+		}
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -79,7 +88,12 @@ public class Tank : MonoBehaviour
 		if (other.gameObject.layer == LayerMask.NameToLayer("Ice"))
 		{
 			if (!iceColliders.Contains(other)) iceColliders.Add(other);
-			onIce = true;
+			OnIce = true;
+		}
+		else if (other.gameObject.layer == LayerMask.NameToLayer("Lava"))
+		{
+			if (!lavaColliders.Contains(other)) lavaColliders.Add(other);
+			InLava = true;
 		}
 	}
 
@@ -88,7 +102,12 @@ public class Tank : MonoBehaviour
 		if (other.gameObject.layer == LayerMask.NameToLayer("Ice"))
 		{
 			if (iceColliders.Contains(other)) iceColliders.Remove(other);
-			if (iceColliders.Count == 0) onIce = false;
+			if (iceColliders.Count == 0) OnIce = false;
+		}
+		else if (other.gameObject.layer == LayerMask.NameToLayer("Lava"))
+		{
+			if (lavaColliders.Contains(other)) lavaColliders.Remove(other);
+			if (lavaColliders.Count == 0) InLava = false;
 		}
 	}
 
@@ -96,7 +115,7 @@ public class Tank : MonoBehaviour
 	{
 		if (fireTimer > 0f) return;
 
-		GameObject shellObj = Instantiate(shellPrefab, muzzleTrans.position, muzzleTrans.rotation);
+		GameObject shellObj = Instantiate(isMine ? shellPrefabPlayer : shellPrefabEnemy, muzzleTrans.position, muzzleTrans.rotation);
 		Shell shell = shellObj.GetComponent<Shell>();
 		shell.tank = this;
 		shell.speed = shellSpeed;
@@ -111,7 +130,7 @@ public class Tank : MonoBehaviour
 		fireAudio.PlayOneShot(fireClip);
 
 		animator.PlayFireAnim();
-		if (isMine) CameraAnimator.instance.PlayFireAnim();
+		if (isMine) CameraAnimator.Instance.PlayFireAnim();
 
 		fireTimer = fireInterval;
 	}
@@ -123,9 +142,9 @@ public class Tank : MonoBehaviour
 
 	public bool ReceiveDamage(float damage, Tank sourceTank = null) // 如果被杀死，就返回true，否则返回false
 	{
-		controller.OnBotTakeDamage();
+		if (isImmortal || hp <= 0f) return false;
 
-		if (isImmortal) return false;
+		controller.OnBotTakeDamage();
 
 		hp -= damage;
 		if (hp <= 0f)
@@ -146,14 +165,14 @@ public class Tank : MonoBehaviour
 			// 统计
 			if (isMine)
 			{
-				++LevelManager.instance.deathCount;
-				LevelManager.instance.score -= sourceTank.points;//GameManager.deathPenalty;
+				++LevelManager.Instance.deathCount;
+				LevelManager.Instance.score -= GameManager.deathPenalty;
 			}
 			else
 			{
-				if (sourceTank.isMine) ++LevelManager.instance.killCount;
-				--LevelManager.instance.tanksToKill;
-				LevelManager.instance.score += points;
+				if (sourceTank != null && sourceTank.isMine) ++LevelManager.Instance.killCount;
+				--LevelManager.Instance.tanksToKill;
+				LevelManager.Instance.score += points;
 			}
 
 			Destroy(gameObject);
@@ -171,11 +190,6 @@ public class Tank : MonoBehaviour
 				{
 					hp = Mathf.Clamp(hp + initHp * 0.7f, 0f, initHp);
 					healthParticle.Play();
-					break;
-				}
-			case Item.POWER: // 加伤害
-				{
-					//TODO
 					break;
 				}
 		}
@@ -206,6 +220,29 @@ public class Tank : MonoBehaviour
 			isImmortal = false;
 		}
 
+		// 岩浆
+		if (InLava)
+		{
+			if (!onFireParticles[0].isPlaying)
+			{
+				foreach (var onFireParticle in onFireParticles)
+				{
+					onFireParticle.Play();
+				}
+			}
+			ReceiveDamage(120f * Simulation.timestep);
+		}
+		else
+		{
+			if (onFireParticles[0].isPlaying)
+			{
+				foreach (var onFireParticle in onFireParticles)
+				{
+					onFireParticle.Stop();
+				}
+			}
+		}
+
 		// 开火计时
 		fireTimer -= Simulation.timestep;//Time.deltaTime;
 		if (fireTimer < 0f) fireTimer = 0f;
@@ -215,15 +252,21 @@ public class Tank : MonoBehaviour
 
 		// 移动
 		Simulation.AutoDamp(ref decelEffect, 0.97f);
-		maxSpeed = initSpeed * Mathf.Pow(0.3f, decelEffect) * (onIce ? 1.4f : 1f);
+		maxSpeed = initSpeed * Mathf.Pow(0.3f, decelEffect) * (OnIce ? 1.4f : (InLava ? 0.3f : 1f));
 		if (controller.moving)
 		{
-			Simulation.AutoTarget(ref speed, maxSpeed, (onIce ? 0.6f : 0.3f));
+			Simulation.AutoTarget(ref speed, maxSpeed, (OnIce ? 0.6f : 0.3f));
 		}
 		else
 		{
-			Simulation.AutoTarget(ref speed, 0f, (onIce ? 0.1f : 0.4f));
+			Simulation.AutoTarget(ref speed, 0f, (OnIce ? 0.1f : 0.4f));
 		}
+		const float castRadius = 0.3f;
+		const float castOffset = 0.1f;
+		Vector3 castBoxHalfExtents = transform.TransformVector(new Vector3(castRadius, 0f, 0f));
+		castBoxHalfExtents.x = Mathf.Abs(castBoxHalfExtents.x);
+		castBoxHalfExtents.z = Mathf.Abs(castBoxHalfExtents.z);
+		InFrontOfLava = Physics.BoxCast(transform.position - transform.forward * castOffset, castBoxHalfExtents * (0.7f / castRadius), transform.forward, Quaternion.identity, 0.8f + castRadius + castOffset, LayerMask.GetMask("Lava"), QueryTriggerInteraction.Collide);
 		//if (controller.moving)
 		{
 			float dist = speed * Simulation.timestep;//Time.deltaTime;
@@ -238,13 +281,8 @@ public class Tank : MonoBehaviour
 				if (!isMine) controller.OnBotObstacle();
 				break;
 			}*/
-			const float castRadius = 0.3f;
-			const float castOffset = 0.1f;
 			//Debug.DrawRay(transform.position - transform.forward * castOffset, transform.forward * (dist + castRadius + castOffset), Color.red, 0.1f, false);
 			//if (isMine) print(transform.TransformVector(new Vector3(castRadius, 0.1f, 0.001f)));
-			Vector3 castBoxHalfExtents = transform.TransformVector(new Vector3(castRadius, 0f, 0f));
-			castBoxHalfExtents.x = Mathf.Abs(castBoxHalfExtents.x);
-			castBoxHalfExtents.z = Mathf.Abs(castBoxHalfExtents.z);
 			if (Physics.BoxCast(transform.position - transform.forward * castOffset, castBoxHalfExtents, transform.forward, out RaycastHit hitInfo, Quaternion.identity, dist + castRadius + castOffset, LayerMask.GetMask("Wall", "Tank", "River")))
 			{
 				dist = hitInfo.distance * 0f - 0.001f; // 后退一点距离，防止卡墙
@@ -268,7 +306,7 @@ public class Tank : MonoBehaviour
 
 	private void Update()
 	{
-		if (LevelManager.instance.paused) return;
+		if (LevelManager.Instance.paused) return;
 
 		while (simElapsedTime >= Simulation.timestep)
 		{

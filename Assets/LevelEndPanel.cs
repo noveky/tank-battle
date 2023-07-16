@@ -16,7 +16,7 @@ public class LevelEndPanel : MonoBehaviour
 
 	private void Update()
 	{
-		if (!LevelManager.instance.paused) return;
+		if (!LevelManager.Instance.paused) return;
 		buttonsParentObj.SetActive(true);
 		if (defaultButton != null && Input.GetButtonDown("Submit")) defaultButton.onClick.Invoke();
 	}

@@ -86,6 +86,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ice
       objectReference: {fileID: 0}
+    - target: {fileID: 6149975087654515456, guid: df48db0a970269c479f3da7e56a8fd6d, type: 3}
+      propertyPath: m_Size.z
+      value: 0.01
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: df48db0a970269c479f3da7e56a8fd6d, type: 3}
 --- !u!4 &1543637076962371601 stripped

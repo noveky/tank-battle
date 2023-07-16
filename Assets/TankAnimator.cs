@@ -24,7 +24,7 @@ public class TankAnimator : MonoBehaviour
 
 	private void LateUpdate()
 	{
-		if (LevelManager.instance.paused) return;
+		if (LevelManager.Instance.paused) return;
 
 		while (simElapsedTime >= Simulation.timestep)
 		{

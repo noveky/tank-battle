@@ -4858,7 +4858,7 @@ MonoBehaviour:
   respawnWhenDead: 0
   spawnTime: 0
   respawnTime: 0
-  playerNum: 1
+  playerNum: 0
   spawnParticle: {fileID: 7654352558643297470}
 --- !u!1001 &5422523824592431301
 PrefabInstance:
@@ -4901,7 +4901,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 36831748978964657, guid: 23bf98075b546e04dac5e1969da86971, type: 3}
       propertyPath: points
-      value: 350
+      value: 450
       objectReference: {fileID: 0}
     - target: {fileID: 36831748978964657, guid: 23bf98075b546e04dac5e1969da86971, type: 3}
       propertyPath: initSpeed
@@ -4913,7 +4913,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 36831748978964657, guid: 23bf98075b546e04dac5e1969da86971, type: 3}
       propertyPath: shellPower
-      value: 40
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 36831748978964657, guid: 23bf98075b546e04dac5e1969da86971, type: 3}
       propertyPath: shellSpeed
@@ -4929,11 +4929,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 36831748978964657, guid: 23bf98075b546e04dac5e1969da86971, type: 3}
       propertyPath: shellDecelIndex
-      value: 1.5
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 36831748978964658, guid: 23bf98075b546e04dac5e1969da86971, type: 3}
       propertyPath: botPressDesireFactor
-      value: 0.1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 36831748978964658, guid: 23bf98075b546e04dac5e1969da86971, type: 3}
       propertyPath: botWallDestroyDesireFactor

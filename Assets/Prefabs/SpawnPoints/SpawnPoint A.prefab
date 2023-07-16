@@ -4857,7 +4857,7 @@ MonoBehaviour:
   immortalTime: 1
   respawnWhenDead: 1
   spawnTime: 1
-  respawnTime: 4
+  respawnTime: 1
   playerNum: 1
   spawnParticle: {fileID: 6429699501757494995}
 --- !u!1001 &6252601981581245525

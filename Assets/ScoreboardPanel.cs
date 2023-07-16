@@ -9,12 +9,12 @@ public class ScoreboardPanel : MonoBehaviour
 
 	public void ShowScoreboard()
 	{
-		scoreboardText.text = GameManager.instance.GetScoreboard();
+		scoreboardText.text = GameManager.Instance.GetScoreboard();
 	}
 
 	public void ClearScoreboard()
 	{
-		GameManager.instance.ClearScoreboard();
+		GameManager.Instance.ClearScoreboard();
 		ShowScoreboard();
 	}
 }

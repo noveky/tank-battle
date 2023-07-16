@@ -34,7 +34,7 @@ public class Shell : MonoBehaviour
 	float lastDist = 0f; // 记录上一帧的移动距离，目的是每次判断的时候和上一帧的线段有所重合，防止错过相向移动的目标
 	private void Update()
 	{
-		if (LevelManager.instance.paused) return;
+		if (LevelManager.Instance.paused) return;
 
 		float dist = speed * Time.deltaTime;
 		bool dontDestroy = false;
@@ -83,7 +83,7 @@ public class Shell : MonoBehaviour
 			else if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Tank"))
 			{
 				Tank hitTank = hitInfo.transform.GetComponent<Tank>();
-				bool dealDamage = (tank.isMine ^ hitTank.isMine) || (GameManager.instance.gameMode != GameManager.GameMode.COOP_MODE && tank.isMine && hitTank.isMine && tank.playerNum != hitTank.playerNum);
+				bool dealDamage = (tank.isMine ^ hitTank.isMine) || (GameManager.Instance.gameMode != GameManager.GameMode.COOP_MODE && tank.isMine && hitTank.isMine && tank.playerNum != hitTank.playerNum);
 				if (dealDamage)
 				{
 					if (hitTank != null)
@@ -105,14 +105,14 @@ public class Shell : MonoBehaviour
 				}
 			}
 
-			CameraAnimator.instance.PlayHitAnim(animPower);
+			CameraAnimator.Instance.PlayHitAnim(animPower);
 
 			if (!dontDestroy) Destroy(gameObject);
 		}
 		else if (Physics.SphereCast(transform.position, shellClashCastRadius, transform.forward, out RaycastHit hitInfo0, dist * 2.1f, LayerMask.GetMask("Shell")))
 		{
 			// 炮弹对撞抵消
-			CameraAnimator.instance.PlayHitAnim(power * 2f);
+			CameraAnimator.Instance.PlayHitAnim(power * 2f);
 
 			Destroy(hitInfo0.transform.gameObject);
 			Destroy(gameObject);

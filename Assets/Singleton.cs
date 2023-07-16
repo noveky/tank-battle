@@ -7,13 +7,13 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 	private static object _lock = new object();
 
 	//public void GetSingleton() { }
-	public T GetSingleton() { return instance; }
+	public T GetSingleton() { return Instance; }
 
 	public static bool hasInstance { get => _instance != null; }
 
 	public static bool isGeneratingInstance = false;
 
-	public static T instance
+	public static T Instance
 	{
 		get
 		{

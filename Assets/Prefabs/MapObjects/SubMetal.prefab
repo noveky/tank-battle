@@ -116,6 +116,7 @@ MonoBehaviour:
   destroyable: 0
   isBase: 0
   botBreakingDesireBonus: 0
+  fixRotation: 1
 --- !u!1 &2337454657875896810
 GameObject:
   m_ObjectHideFlags: 0

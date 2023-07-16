@@ -5,7 +5,7 @@ using System.IO;
 
 public class GameManager : Singleton<GameManager>
 {
-	//public const int deathPenalty = 200; // 死亡时的扣分数目
+	public const int deathPenalty = 1000; // 死亡时的扣分数目
 
 	public enum GameMode { UNDEFINED, SINGLEPLAYER_MODE, COOP_MODE, DUALBATTLE_MODE };
 
@@ -16,9 +16,9 @@ public class GameManager : Singleton<GameManager>
 	string scoreboardPathName = string.Empty;
 	string loadLevelPathPrefix = string.Empty;
 
-	[System.NonSerialized] public GameMode gameMode = GameManager.GameMode.UNDEFINED; // 0: 单人闯关，1：双人闯关，2：双人对战
+	public GameMode gameMode = GameManager.GameMode.UNDEFINED; // 0: 单人闯关，1：双人闯关，2：双人对战
 
-	[System.NonSerialized] public int score = 0;
+	public int score = 0;
 
 	[SerializeField] AudioSource mainMenuAudio = null;
 	[SerializeField] AudioSource battleAudio = null;
@@ -77,7 +77,7 @@ public class GameManager : Singleton<GameManager>
 		// Cursor
 		if (LevelManager.hasInstance)
 		{
-			if (LevelManager.instance.paused)
+			if (LevelManager.Instance.paused)
 			{
 				Cursor.lockState = CursorLockMode.None;
 				Cursor.visible = true;
@@ -105,7 +105,7 @@ public class GameManager : Singleton<GameManager>
 		{
 			case GameMode.SINGLEPLAYER_MODE:
 				{
-					mode += "Singleplayer";
+					mode = "Singleplayer";
 					break;
 				}
 			case GameMode.COOP_MODE:
@@ -115,6 +115,14 @@ public class GameManager : Singleton<GameManager>
 				}
 		}
 		str += "Mode: " + mode + ", Name: " + name + ", Score: " + score + "\n";
+
+		string scoreboardDir = Path.GetDirectoryName(scoreboardPathName);
+
+		if (!Directory.Exists(scoreboardDir))
+		{
+			Directory.CreateDirectory(scoreboardDir);
+		}
+
 		File.WriteAllText(scoreboardPathName, str);
 	}
 
@@ -141,6 +149,14 @@ public class GameManager : Singleton<GameManager>
 	{
 		string pathName = GetLoadLevelPathName();
 		string str = levelName + "\n" + score;
+
+		string saveGameDir = Path.GetDirectoryName(pathName);
+
+		if (!Directory.Exists(saveGameDir))
+		{
+			Directory.CreateDirectory(saveGameDir);
+		}
+
 		File.WriteAllText(pathName, str);
 	}
 

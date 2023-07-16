@@ -759,6 +759,8 @@ MonoBehaviour:
   initHp: 300
   destroyable: 1
   isBase: 0
+  botBreakingDesireBonus: 0
+  fixRotation: 1
 --- !u!1 &1968076777820954154
 GameObject:
   m_ObjectHideFlags: 0

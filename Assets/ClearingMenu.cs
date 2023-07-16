@@ -15,12 +15,19 @@ public class ClearingMenu : MonoBehaviour
 
 	public void NextLevel()
 	{
-		SceneManager.LoadScene(LevelManager.instance.nextLevel);
+		SceneManager.LoadScene(LevelManager.Instance.nextLevelSceneName);
 	}
 
 	public void SaveAndBack()
 	{
-		GameManager.instance.SaveGame(LevelManager.instance.nextLevel);
+		if (LevelManager.Instance.LevelComplete())
+		{
+			GameManager.Instance.SaveGame(LevelManager.Instance.nextLevelSceneName);
+		}
+		else
+		{
+			GameManager.Instance.SaveGame(SceneManager.GetActiveScene().name);
+		}
 		BackHome();
 	}
 
@@ -31,7 +38,7 @@ public class ClearingMenu : MonoBehaviour
 
 	public void Restart()
 	{
-		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+		LevelManager.Instance.RestartLevel();
 	}
 
 	public void SubmitScore(InputField nameInput)
@@ -41,7 +48,7 @@ public class ClearingMenu : MonoBehaviour
 		{
 			name = "Player";
 		}
-		GameManager.instance.SubmitScore(name);
+		GameManager.Instance.SubmitScore(name);
 		BackHome();
 	}
 }
