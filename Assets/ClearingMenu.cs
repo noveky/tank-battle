@@ -20,11 +20,15 @@ public class ClearingMenu : MonoBehaviour
 
 	public void SaveAndBack()
 	{
-		if (LevelManager.Instance.LevelComplete())
+		if (LevelManager.Instance.LevelComplete()) // 关卡通过了
 		{
 			GameManager.Instance.SaveGame(LevelManager.Instance.nextLevelSceneName);
 		}
-		else
+		else if (LevelManager.Instance.LevelEnd()) // 关卡结束但失败了，把分扣回去
+		{
+			GameManager.Instance.score -= LevelManager.Instance.score;
+		}
+		else // 关卡未结束
 		{
 			GameManager.Instance.SaveGame(SceneManager.GetActiveScene().name);
 		}

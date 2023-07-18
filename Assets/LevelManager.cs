@@ -10,7 +10,7 @@ public class LevelManager : Singleton<LevelManager>
 
 	[SerializeField] AudioClip battleClip = null;
 
-	[System.NonSerialized] public int killCount = 0, deathCount = 0, score = 0;
+	public int killCount = 0, deathCount = 0, score = 0;
 
 	[SerializeField] GameManager.GameMode defaultGameMode = GameManager.GameMode.UNDEFINED;//bool isVersusLevel = false; // 对战地图
 	[SerializeField] SpawnPoint mySpawnPointA = null, mySpawnPointB = null; // 单机关卡的两个出生点
@@ -122,6 +122,7 @@ public class LevelManager : Singleton<LevelManager>
 
 					// 显示关卡结算界面
 					string data = killCount + "\n" + deathCount + "\n" + score + "\n" + GameManager.Instance.score;
+
 					if (!LevelComplete())
 					{
 						// 玩家基地被销毁，通关失败
@@ -139,6 +140,12 @@ public class LevelManager : Singleton<LevelManager>
 		}
 		yield return new WaitForSeconds(2f); // 延迟一些时间
 		SetPaused(true); // 暂停
+	}
+
+	public void ChangeScore(int points)
+	{
+		if (LevelEnd()) return;
+		score += points;
 	}
 
 	public void RestartLevel()

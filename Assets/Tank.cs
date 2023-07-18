@@ -166,13 +166,13 @@ public class Tank : MonoBehaviour
 			if (isMine)
 			{
 				++LevelManager.Instance.deathCount;
-				LevelManager.Instance.score -= GameManager.deathPenalty;
+				LevelManager.Instance.ChangeScore(-GameManager.deathPenalty);
 			}
 			else
 			{
 				if (sourceTank != null && sourceTank.isMine) ++LevelManager.Instance.killCount;
 				--LevelManager.Instance.tanksToKill;
-				LevelManager.Instance.score += points;
+				LevelManager.Instance.ChangeScore(points);
 			}
 
 			Destroy(gameObject);

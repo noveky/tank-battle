@@ -1,2 +1,3 @@
 Mode: Singleplayer, Name: Player, Score: 34550
 Mode: Singleplayer, Name: noveky, Score: 56200
+Mode: Singleplayer, Name: noveky, Score: 88200
